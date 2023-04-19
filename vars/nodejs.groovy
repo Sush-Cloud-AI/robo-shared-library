@@ -1,20 +1,21 @@
+
+
 def lintcheck(){
 sh '''
  echo Installing Jslint for ${COMPONENT}
  npm install jslint
- ls -ltr node_modules/jslint/bin"
+ ls -ltr node_modules/jslint/bin
  ~/node_modules/jslint/bin/jslint.js server.js || true
  '''    
-} // true is used to mark the present step as pass and skip to next step  even if lint check fails
+} 
+// true is used to mark the present step as pass and skip to next step  even if lint check fails.........
 
 
 
 
 
 
-def call (){
-
-
+def call (){ // call is the default which will be called
 pipeline {
     agent any
     stages{
