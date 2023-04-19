@@ -1,4 +1,4 @@
-
+// for nodejs projects
 
 def lintcheck(){
 sh '''
