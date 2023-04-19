@@ -51,6 +51,13 @@ pipeline {
 
         }
     }
+
+    stage('build'){
+            steps{
+                 sh "echo This a build stage"
+
+        }
+    }
 }
 }
 }
