@@ -67,7 +67,18 @@ pipeline {
         }
     }
 
-    stage('build'){
+
+    stage('Preparing the atifact'){
+        when{ expression {env.TAG_NAME != null}} // will run when a tag is pushed . 
+            steps{    
+            sh "npm install"
+            sh "zip ${COMPONENT}.zip node_modules/ server.js"
+            sh "Artifact prep completed !!!"
+        }
+        }
+
+    stage('Uploading the articats'){
+        when{ expression {env.TAG_NAME != null}} // will run when a tag is pushed .
             steps{
                  sh "echo This a build stage"
 
