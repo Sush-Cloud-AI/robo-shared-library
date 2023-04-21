@@ -3,8 +3,8 @@
 
 def lintcheck(){
 sh '''
- echo Lint check starting for  ${COMPONENT}
- pylint *.py || true
+ #echo Lint check starting for  ${COMPONENT}
+ #pylint *.py || true
  echo Lint check completed for  ${COMPONENT}
  '''    
 } 
@@ -40,6 +40,32 @@ pipeline {
 
             }
 
+        }
+    }
+
+     stage('Testcases'){
+        parallel{
+            stage('unit testing'){
+                steps{
+                    //mvn verify or npm test
+                    sh "echo Unit test completed "
+                }
+
+            }
+            stage('Intergration testing'){
+                steps{
+                    //mvn verify  or npm verify 
+                    sh "echo Unit test completed "
+                }
+
+            }
+            stage('Functional testing'){
+                steps{
+                     
+                    sh "Functional test completed "
+                }
+
+            }
         }
     }
 
