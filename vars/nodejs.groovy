@@ -73,7 +73,7 @@ pipeline {
             steps{    
             sh "npm install"
             sh "zip ${COMPONENT}.zip node_modules/ server.js"
-            sh "Artifact prep completed !!!"
+            sh "echo Artifact prep completed !!!"
         }
         }
 
