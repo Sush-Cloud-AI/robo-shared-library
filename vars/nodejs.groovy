@@ -67,10 +67,24 @@ pipeline {
             }
         }
     }
+// checking the precence of the atifact on nexus / preparing the atifact and upload should happen only wehn the artifcat is not present in nexus already 
+
+        stage('checking  artifactory in nexus') {
+           when{ expression {env.TAG_NAME != null}} 
+           steps{
+            script{
+                env.UPLOAD_STATUS=sh(returnStdout: true, script: "curl http://172.31.8.134:8081/service/rest/repository/browse/${COMPONENT}/ |grep ${COMPONENT}-${TAG_NAME}.zip || true")
+                // true in the above line is to make the UPLOAD_STATUS to make is forecully true as it reutrns a null when curl will not have a value to print 
+                print UPLOAD_STATUS
+            }
+           }
+
+        }
 
 
     stage('Preparing the atifact'){
         when{ expression {env.TAG_NAME != null}} // will run when a tag is pushed . 
+        when{ expression {env.UPLOAD_STATUS == ""}} // will allow upload only when the curl return null from above stage
             steps{    
             sh "npm install"
             sh "zip ${COMPONENT}-${TAG_NAME}.zip node_modules/ server.js"
@@ -80,6 +94,7 @@ pipeline {
 
     stage('Uploading the articats'){
         when{ expression {env.TAG_NAME != null}} // will run when a tag is pushed .
+        when{ expression {env.UPLOAD_STATUS == ""}}
             steps{
                  sh "curl -f -v -u ${NEXUS_USR}:${NEXUS_PSW} --upload-file ${COMPONENT}-${TAG_NAME}.zip http://172.31.3.38:8081/repository/${COMPONENT}/${COMPONENT}-${TAG_NAME}.zip"
                  // curl returns failure when failed when we use -f . 
