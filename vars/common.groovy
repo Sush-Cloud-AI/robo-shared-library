@@ -89,7 +89,7 @@ def artifact(){
             }
            }
 
-    if {env.UPLOAD_STATUS == ""}{ // will allow upload only when the curl return null from above stage
+    if (env.UPLOAD_STATUS == ""){ // will allow upload only when the curl return null from above stage
     stage('Preparing the atifact'){
         if (env.APP_TYPE == "nodejs"){
             sh "npm install"// Generates the nodes_modules
