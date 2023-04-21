@@ -20,6 +20,7 @@ pipeline {
     agent any
     environment {                     
         SONAR = credentials('sonar') 
+        NEXUS = credentials('nexus')
     }
     stages{
         // should run on every coomit to feautre branch 
@@ -80,7 +81,7 @@ pipeline {
     stage('Uploading the articats'){
         when{ expression {env.TAG_NAME != null}} // will run when a tag is pushed .
             steps{
-                 sh "echo This a build stage"
+                 sh "curl -f -v -u ${NEXUS_USR}:${NEXUS_PSW} --upload-file ${COMPONENT}-${TAG_NAME}.zip http://172.31.3.38:8081/repository/${COMPONENT}/${COMPONENT}.zip"
 
         }
     }
