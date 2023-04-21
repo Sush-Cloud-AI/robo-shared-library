@@ -76,6 +76,54 @@ def testcases() {
       }
 
 
+// prep artifact
+
+def artifact(){
+
+    stage('checking  artifactory in nexus') {
+            
+           script{
+                env.UPLOAD_STATUS=sh(returnStdout: true, script: "curl http://172.31.3.38:8081/service/rest/repository/browse/${COMPONENT}/ |grep ${COMPONENT}-${TAG_NAME}.zip || true")
+                // true in the above line is to make the UPLOAD_STATUS to make is forecully true as it reutrns a null when curl will not have a value to print 
+                print UPLOAD_STATUS
+            }
+           }
+
+    if {env.UPLOAD_STATUS == ""}{ // will allow upload only when the curl return null from above stage
+    stage('Preparing the atifact'){
+        if (env.APP_TYPE == "nodejs"){
+            sh "npm install"// Generates the nodes_modules
+            sh "zip -r ${COMPONENT}-${TAG_NAME}.zip node_modules/ server.js" 
+            sh "echo Artifacts Preparation Completed................!!!"
+            
+        }
+
+        else if (env.APP_TYPE == "java")  {
+            sh "mvn clean package"
+            sh "mv target/${COMPONENT}-1.0.jar ${COMPONENT}.jar"
+            sh "zip -r ${COMPONENT}-${TAG_NAME}.zip ${COMPONENT}.jar"
+           }
+
+        else if (env.APP_TYPE == "python")  {
+            sh "zip -r ${COMPONENT}-${TAG_NAME}.zip *.py *.ini requirements.txt"
+           }
+
+        else if (env.APP_TYPE == "nginx") {  
+            sh '''
+            cd static
+            zip -r ../${COMPONENT}-${TAG_NAME}.zip * 
+            ''' 
+            } 
+    }
+
+    stage('Uploading the articats'){
+        withCredentials([usernamePassword(credentialsId: 'nexus', passwordVariable: 'NEXUS_PSW', usernameVariable: 'NEXUS_USR')]) {
+           sh "curl -f -v -u ${NEXUS_USR}:${NEXUS_PSW} --upload-file ${COMPONENT}-${TAG_NAME}.zip http://172.31.3.38:8081/repository/${COMPONENT}/${COMPONENT}-${TAG_NAME}.zip"
+            // curl returns failure when failed when we use -f . 
+            }
+    }
+    }
+}
 
 
 
