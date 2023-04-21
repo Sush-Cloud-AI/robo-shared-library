@@ -46,21 +46,21 @@ pipeline {
             stage('unit testing'){
                 steps{
                     //mvn verify or npm test
-                    sh "echo Unit test completed "
+                    sh "echo Unit test completed"
                 }
 
             }
             stage('Intergration testing'){
                 steps{
                     //mvn verify  or npm verify 
-                    sh "echo Unit test completed "
+                    sh "echo Unit test completed"
                 }
 
             }
             stage('Functional testing'){
                 steps{
                      
-                    sh "Functional test completed "
+                    sh "echo Functional test completed"
                 }
 
             }

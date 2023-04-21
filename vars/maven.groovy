@@ -60,7 +60,7 @@ pipeline {
             stage('Functional testing'){
                 steps{
                      
-                    sh "Functional test completed "
+                    sh "echo Functional test completed"
                 }
 
             }

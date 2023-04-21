@@ -27,7 +27,3 @@ def sonarcheck() {
 } 
 // not required to compile for nodejs 
 
-
-def testcases(){
-
-}
