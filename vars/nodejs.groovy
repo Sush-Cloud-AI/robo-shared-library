@@ -73,7 +73,7 @@ pipeline {
         when{ expression {env.TAG_NAME != null}} // will run when a tag is pushed . 
             steps{    
             sh "npm install"
-            sh "zip ${COMPONENT}.zip node_modules/ server.js"
+            sh "zip ${COMPONENT}-${TAG_NAME}.zip node_modules/ server.js"
             sh "echo Artifact prep completed !!!"
         }
         }
@@ -81,7 +81,8 @@ pipeline {
     stage('Uploading the articats'){
         when{ expression {env.TAG_NAME != null}} // will run when a tag is pushed .
             steps{
-                 sh "curl -f -v -u ${NEXUS_USR}:${NEXUS_PSW} --upload-file ${COMPONENT}.zip http://172.31.3.38:8081/repository/${COMPONENT}/${COMPONENT}.zip"
+                 sh "curl -f -v -u ${NEXUS_USR}:${NEXUS_PSW} --upload-file ${COMPONENT}-${TAG_NAME}.zip http://172.31.3.38:8081/repository/${COMPONENT}/${COMPONENT}-${TAG_NAME}.zip"
+                 // curl returns failure when failed when we use -f . 
 
         }
     }
