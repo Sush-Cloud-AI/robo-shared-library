@@ -83,8 +83,9 @@ pipeline {
 
 
     stage('Preparing the atifact'){
-        when{ expression {env.TAG_NAME != null}} // will run when a tag is pushed . 
-        when{ expression {env.UPLOAD_STATUS == ""}} // will allow upload only when the curl return null from above stage
+        when{ 
+            expression {env.TAG_NAME != null} // will run when a tag is pushed . 
+            expression {env.UPLOAD_STATUS == ""}} // will allow upload only when the curl return null from above stage
             steps{    
             sh "npm install"
             sh "zip ${COMPONENT}-${TAG_NAME}.zip node_modules/ server.js"
@@ -93,8 +94,8 @@ pipeline {
         }
 
     stage('Uploading the articats'){
-        when{ expression {env.TAG_NAME != null}} // will run when a tag is pushed .
-        when{ expression {env.UPLOAD_STATUS == ""}}
+        when{ expression {env.TAG_NAME != null} // will run when a tag is pushed .
+            expression {env.UPLOAD_STATUS == ""}}
             steps{
                  sh "curl -f -v -u ${NEXUS_USR}:${NEXUS_PSW} --upload-file ${COMPONENT}-${TAG_NAME}.zip http://172.31.3.38:8081/repository/${COMPONENT}/${COMPONENT}-${TAG_NAME}.zip"
                  // curl returns failure when failed when we use -f . 
