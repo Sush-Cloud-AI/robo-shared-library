@@ -73,7 +73,7 @@ pipeline {
            when{ expression {env.TAG_NAME != null}} 
            steps{
             script{
-                env.UPLOAD_STATUS=sh(returnStdout: true, script: "curl http://172.31.8.134:8081/service/rest/repository/browse/${COMPONENT}/ |grep ${COMPONENT}-${TAG_NAME}.zip || true")
+                env.UPLOAD_STATUS=sh(returnStdout: true, script: "curl http://172.31.9.181:8081/service/rest/repository/browse/${COMPONENT}/ |grep ${COMPONENT}-${TAG_NAME}.zip || true")
                 // true in the above line is to make the UPLOAD_STATUS to make is forecully true as it reutrns a null when curl will not have a value to print 
                 print UPLOAD_STATUS
             }
