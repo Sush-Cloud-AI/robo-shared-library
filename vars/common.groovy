@@ -32,7 +32,7 @@ def lintchecks(){
     }
 }
 
-
+// sonar checks scripted
 def sonarcheck() {
     stage('sonar check'){
     if (env.APP_TYPE == "java"){   
@@ -56,6 +56,24 @@ def sonarcheck() {
     }
     }
 }
+
+// unit test scripted 
+
+def testcases() {
+    stage('Test Cases') {
+        def stages = [:]    // declaring empty list
+                stages["Unit Testing"] = {
+                        sh 'echo Unit Testing Completed'
+                }
+                stages["Integration Testing"] = {
+                        sh 'echo Integration Testing Completed'
+                }
+                stages["Function Testing"] = {
+                        sh 'echo Functional Testing Completed'
+                }
+              parallel(stages) 
+          }
+      }
 
 
 
