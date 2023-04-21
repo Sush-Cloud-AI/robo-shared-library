@@ -8,7 +8,7 @@ def call(){
         common.lintchecks()
         common.sonarcheck()
         common.testcases()
-        if{env.TAG_NAME != null}{ //will run when a tag is pushed .
+        if(env.TAG_NAME != null){ //will run when a tag is pushed .
             common.artifact() 
         }
     }
