@@ -29,6 +29,11 @@ def lintchecks(){
         '''
 
         }
+        else {
+        sh '''
+        echo lint checks completed for ${COMPONENT}
+        '''
+        }
     }
 }
 
