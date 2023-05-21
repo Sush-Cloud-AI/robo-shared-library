@@ -12,15 +12,17 @@ properties([
 
     node{
         git branch: 'main', url: "https://github.com/Sush-Cloud-AI/${REPONAME}"
-        stage('terraform init') {
+        stage('Terraform init') {
             sh "terrafile -f env-${ENV}/Terrafile"
             sh "terraform init -backend-config=env-${ENV}/backend-${ENV}.tfvars"
             }
 
-        stage('erraform plan') {
+        stage('Terraform plan') {
             sh "terraform plan -var-file=env-${ENV}/${ENV}.tfvars"
             }
-        stage('terraform apply') {
+
+
+        stage('Terraform apply') {
             sh "terraform apply -var-file=env-${ENV}/${ENV}.tfvars -auto-approve"
             }
 
