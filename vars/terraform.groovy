@@ -11,6 +11,7 @@ properties([
 
 
     node{
+        sh "rm -rf *"
         git branch: 'main', url: "https://github.com/Sush-Cloud-AI/${REPONAME}"
         stage('Terraform init') {
             sh "terrafile -f env-${ENV}/Terrafile"
